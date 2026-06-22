@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrow Escape India</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{
+  min-height:100vh;display:flex;justify-content:center;align-items:center;
+  background:linear-gradient(135deg,#ff9933,#fff,#138808);
+}
+.game{
+  width:100%;max-width:430px;min-height:100vh;background:#f7f7f7;
+  padding:14px;position:relative;overflow:hidden;
+}
+.top{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+}
+.btn{
+  border:0;border-radius:14px;padding:10px 14px;background:#111;color:white;
+  font-weight:bold;cursor:pointer;
+}
+.info{
+  text-align:center;background:white;border-radius:18px;padding:10px;margin-bottom:12px;
+  box-shadow:0 4px 15px #0002;
+}
+.info h2{font-size:20px}
+.stats{
+  display:flex;justify-content:space-around;margin:10px 0;font-weight:bold;
+}
+.board{
+  width:100%;height:430px;background:#fff;border-radius:28px;position:relative;
+  overflow:hidden;box-shadow:0 8px 25px #0003;border:4px solid #222;
+}
+.arrow{
+  width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#222,#555);
+  color:white;display:flex;justify-content:center;align-items:center;
+  font-size:30px;font-weight:bold;position:absolute;cursor:pointer;
+  box-shadow:0 6px 0 #000,0 10px 15px #0005;
+  transition:.28s ease;
+  user-select:none;
+}
+.arrow.done{opacity:0;transform:scale(.5)}
+.arrow.block{animation:shake .25s}
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  50%{transform:translateX(8px)}
+  75%{transform:translateX(-5px)}
+  100%{transform:translateX(0)}
+}
+.footer{
+  margin-top:12px;background:white;border-radius:18px;padding:12px;text-align:center;
+  box-shadow:0 4px 15px #0002;
+}
+.adbox{
+  margin-top:10px;height:70px;border:2px dashed #888;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;color:#777;font-weight:bold;
+}
+.popup{
+  position:absolute;inset:0;background:#0009;display:none;justify-content:center;align-items:center;
+  z-index:10;
+}
+.card{
+  background:white;border-radius:24px;padding:25px;text-align:center;width:85%;
+}
+.card h1{margin-bottom:10px}
+.card button{margin-top:14px;width:100%}
+</style>
+</head>
+<body>
+
+<div class="game">
+  <div class="top">
+    <button class="btn" onclick="restartLevel()">↻</button>
+    <button class="btn" onclick="useHint()">💡 Hint</button>
+  </div>
+
+  <div class="info">
+    <h2 id="title">Arrow Escape India</h2>
+    <p id="place">Gujarat Level</p>
+  </div>
+
+  <div class="stats">
+    <div>❤️ <span id="lives">3</span></div>
+    <div>Level <span id="level">1</span></div>
+    <div>🪙 <span id="coins">0</span></div>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="footer">
+    Tap arrows. Clear path હોય તો arrow escape થશે.
+    <div class="adbox">Ad Space</div>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="card">
+      <h1 id="popTitle">Level Complete!</h1>
+      <p id="popText">Great job!</p>
+      <button class="btn" onclick="nextLevel()">Next Level</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const board = document.getElementById("board");
+const levelText = document.getElementById("level");
+const coinsText = document.getElementById("coins");
+const livesText = document.getElementById("lives");
+const title = document.getElementById("title");
+const place = document.getElementById("place");
+const popup = document.getElementById("popup");
+
+let level = 1;
+let coins = 0;
+let lives = 3;
+let arrows = [];
+
+const states = [
+  "Gujarat 🦁", "Rajasthan 🏰", "Maharashtra 🌆", "Kerala 🌴", "Delhi 🏛️"
+];
+
+function makeLevels(){
+  let all = [];
+  for(let i=1;i<=20;i++){
+    let count = 5 + Math.floor(i/2);
+    let arr = [];
+    for(let j=0;j<count;j++){
+      let dirs = ["up","down","left","right"];
+      arr.push({
+        x: 40 + Math.floor(Math.random()*300),
+        y: 40 + Math.floor(Math.random()*320),
+        dir: dirs[Math.floor(Math.random()*4)]
+      });
+    }
+    all.push(arr);
+  }
+  return all;
+}
+
+const levels = makeLevels();
+
+function symbol(dir){
+  return dir==="up"?"↑":dir==="down"?"↓":dir==="left"?"←":"→";
+}
+
+function loadLevel(){
+  board.innerHTML = "";
+  arrows = JSON.parse(JSON.stringify(levels[level-1]));
+  levelText.innerText = level;
+  livesText.innerText = lives;
+  coinsText.innerText = coins;
+
+  let stateIndex = Math.floor((level-1)/4);
+  title.innerText = "Arrow Escape India";
+  place.innerText = states[stateIndex] + " • Level " + level;
+
+  arrows.forEach((a,i)=>{
+    const el = document.createElement("div");
+    el.className = "arrow";
+    el.innerText = symbol(a.dir);
+    el.style.left = a.x+"px";
+    el.style.top = a.y+"px";
+    el.onclick = ()=>tapArrow(i,el);
+    board.appendChild(el);
+    a.el = el;
+    a.done = false;
+  });
+}
+
+function tapArrow(i,el){
+  let a = arrows[i];
+  if(a.done) return;
+
+  if(isClear(a,i)){
+    a.done = true;
+    coins += 2;
+    coinsText.innerText = coins;
+
+    if(a.dir==="up") el.style.top = "-80px";
+    if(a.dir==="down") el.style.top = "500px";
+    if(a.dir==="left") el.style.left = "-80px";
+    if(a.dir==="right") el.style.left = "500px";
+
+    setTimeout(()=>el.classList.add("done"),200);
+
+    if(arrows.every(x=>x.done)){
+      setTimeout(showWin,450);
+    }
+  }else{
+    lives--;
+    livesText.innerText = lives;
+    el.classList.add("block");
+    setTimeout(()=>el.classList.remove("block"),300);
+
+    if(lives<=0){
+      document.getElementById("popTitle").innerText = "Game Over";
+      document.getElementById("popText").innerText = "Try again!";
+      popup.style.display = "flex";
+    }
+  }
+}
+
+function isClear(a,index){
+  for(let i=0;i<arrows.length;i++){
+    if(i===index || arrows[i].done) continue;
+    let b = arrows[i];
+
+    if(a.dir==="up"){
+      if(Math.abs(a.x-b.x)<45 && b.y<a.y) return false;
+    }
+    if(a.dir==="down"){
+      if(Math.abs(a.x-b.x)<45 && b.y>a.y) return false;
+    }
+    if(a.dir==="left"){
+      if(Math.abs(a.y-b.y)<45 && b.x<a.x) return false;
+    }
+    if(a.dir==="right"){
+      if(Math.abs(a.y-b.y)<45 && b.x>a.x) return false;
+    }
+  }
+  return true;
+}
+
+function showWin(){
+  document.getElementById("popTitle").innerText = "Level Complete!";
+  document.getElementById("popText").innerText = "+10 coins unlocked";
+  coins += 10;
+  coinsText.innerText = coins;
+  popup.style.display = "flex";
+}
+
+function nextLevel(){
+  popup.style.display = "none";
+  if(level<20){
+    level++;
+    lives = 3;
+    loadLevel();
+  }else{
+    document.getElementById("popTitle").innerText = "Coming Soon!";
+    document.getElementById("popText").innerText = "More India levels soon.";
+    popup.style.display = "flex";
+  }
+}
+
+function restartLevel(){
+  lives = 3;
+  popup.style.display = "none";
+  loadLevel();
+}
+
+function useHint(){
+  for(let i=0;i<arrows.length;i++){
+    if(!arrows[i].done && isClear(arrows[i],i)){
+      arrows[i].el.style.background = "linear-gradient(145deg,#ff9933,#138808)";
+      setTimeout(()=>arrows[i].el.style.background="linear-gradient(145deg,#222,#555)",900);
+      return;
+    }
+  }
+}
+
+loadLevel();
+</script>
+
+</body>
+</html>
