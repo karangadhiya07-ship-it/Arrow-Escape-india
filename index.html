@@ -140,7 +140,31 @@ function makeLevels(){
   return all;
 }
 
-const levels = makeLevels();
+const levels = [
+  [
+    {x:60,y:80,dir:"right"},
+    {x:180,y:80,dir:"down"},
+    {x:60,y:220,dir:"right"},
+    {x:240,y:220,dir:"up"},
+    {x:150,y:320,dir:"left"}
+  ],
+  [
+    {x:60,y:90,dir:"right"},
+    {x:180,y:90,dir:"down"},
+    {x:300,y:90,dir:"left"},
+    {x:120,y:220,dir:"up"},
+    {x:240,y:260,dir:"left"},
+    {x:60,y:330,dir:"right"}
+  ],
+  [
+    {x:50,y:70,dir:"right"},
+    {x:150,y:70,dir:"down"},
+    {x:250,y:70,dir:"left"},
+    {x:90,y:190,dir:"right"},
+    {x:210,y:190,dir:"down"},
+    {x:300,y:300,dir:"left"}
+  ]
+];
 
 function symbol(dir){
   return dir==="up"?"↑":dir==="down"?"↓":dir==="left"?"←":"→";
@@ -234,7 +258,7 @@ function showWin(){
 
 function nextLevel(){
   popup.style.display = "none";
-  if(level<20){
+  if(level<levels.length){
     level++;
     lives = 3;
     loadLevel();
