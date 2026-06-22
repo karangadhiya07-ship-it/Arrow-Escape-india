@@ -1,85 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arrow Escape India</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{
-  min-height:100vh;display:flex;justify-content:center;align-items:center;
-  background:linear-gradient(135deg,#ff9933,#fff,#138808);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffcc99,#fff,#95d68f);
 }
 .game{
-  width:100%;max-width:430px;min-height:100vh;background:#f7f7f7;
-  padding:14px;position:relative;overflow:hidden;
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  background:#f7f7f7;
+  padding:12px;
 }
 .top{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
 }
-.btn{
-  border:0;border-radius:14px;padding:10px 14px;background:#111;color:white;
-  font-weight:bold;cursor:pointer;
+.circle{
+  width:42px;height:42px;border-radius:50%;
+  border:none;background:#111;color:white;font-weight:bold;
+  cursor:pointer;
 }
-.info{
-  text-align:center;background:white;border-radius:18px;padding:10px;margin-bottom:12px;
-  box-shadow:0 4px 15px #0002;
+.titleBox{
+  background:white;border-radius:16px;padding:10px;text-align:center;
+  box-shadow:0 5px 20px #0001;margin-bottom:8px;
 }
-.info h2{font-size:20px}
+.titleBox h2{font-size:18px}
+.titleBox p{font-size:12px}
 .stats{
-  display:flex;justify-content:space-around;margin:10px 0;font-weight:bold;
+  display:flex;justify-content:space-around;
+  font-weight:bold;font-size:14px;margin-bottom:8px;
 }
 .board{
-  width:100%;height:430px;background:#fff;border-radius:28px;position:relative;
-  overflow:hidden;box-shadow:0 8px 25px #0003;border:4px solid #222;
+  width:100%;
+  height:430px;
+  background:#fff;
+  border:4px solid #222;
+  border-radius:24px;
+  position:relative;
+  overflow:hidden;
 }
 .arrow{
-  width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#222,#555);
-  color:white;display:flex;justify-content:center;align-items:center;
-  font-size:30px;font-weight:bold;position:absolute;cursor:pointer;
-  box-shadow:0 6px 0 #000,0 10px 15px #0005;
-  transition:.28s ease;
+  position:absolute;
+  height:42px;
+  min-width:82px;
+  padding:0 18px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#ffd65a,#ff9d2e);
+  color:#222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  font-weight:900;
+  cursor:pointer;
   user-select:none;
+  box-shadow:0 6px 0 #b96a00,0 10px 18px #0004;
+  transition:.28s ease;
 }
-.arrow.done{opacity:0;transform:scale(.5)}
+.arrow.vertical{
+  width:42px;
+  min-width:42px;
+  height:82px;
+  padding:18px 0;
+}
+.arrow.red{background:linear-gradient(145deg,#ff7070,#e82929);box-shadow:0 6px 0 #9b1010,0 10px 18px #0004;color:white}
+.arrow.green{background:linear-gradient(145deg,#6bea86,#17a847);box-shadow:0 6px 0 #087a2b,0 10px 18px #0004;color:white}
+.arrow.blue{background:linear-gradient(145deg,#78b7ff,#1d6fff);box-shadow:0 6px 0 #0945a8,0 10px 18px #0004;color:white}
+.arrow.purple{background:linear-gradient(145deg,#d78bff,#8b2cff);box-shadow:0 6px 0 #5912aa,0 10px 18px #0004;color:white}
+.arrow.done{opacity:0;pointer-events:none}
 .arrow.block{animation:shake .25s}
 @keyframes shake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-8px)}
-  50%{transform:translateX(8px)}
-  75%{transform:translateX(-5px)}
-  100%{transform:translateX(0)}
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-7px,0)}
+  50%{transform:translate(7px,0)}
+  75%{transform:translate(-4px,0)}
+  100%{transform:translate(0,0)}
 }
 .footer{
-  margin-top:12px;background:white;border-radius:18px;padding:12px;text-align:center;
-  box-shadow:0 4px 15px #0002;
+  margin-top:10px;background:white;border-radius:16px;
+  padding:10px;text-align:center;font-size:13px;
+  box-shadow:0 5px 20px #0001;
 }
 .adbox{
-  margin-top:10px;height:70px;border:2px dashed #888;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;color:#777;font-weight:bold;
+  height:64px;border:2px dashed #999;border-radius:14px;
+  display:flex;justify-content:center;align-items:center;
+  margin-top:8px;color:#777;font-weight:bold;
 }
 .popup{
-  position:absolute;inset:0;background:#0009;display:none;justify-content:center;align-items:center;
-  z-index:10;
+  position:fixed;inset:0;background:#0009;
+  display:none;justify-content:center;align-items:center;z-index:50;
 }
 .card{
-  background:white;border-radius:24px;padding:25px;text-align:center;width:85%;
+  width:85%;max-width:360px;background:white;border-radius:24px;
+  padding:24px;text-align:center;
 }
-.card h1{margin-bottom:10px}
-.card button{margin-top:14px;width:100%}
+.card h1{font-size:26px;margin-bottom:8px}
+.card button{
+  width:100%;padding:12px;border:none;border-radius:14px;
+  background:#111;color:white;font-weight:bold;margin-top:14px;
+}
 </style>
 </head>
 <body>
 
 <div class="game">
   <div class="top">
-    <button class="btn" onclick="restartLevel()">↻</button>
-    <button class="btn" onclick="useHint()">💡 Hint</button>
+    <button class="circle" onclick="restartLevel()">↻</button>
+    <button class="circle" onclick="useHint()">💡</button>
   </div>
 
-  <div class="info">
-    <h2 id="title">Arrow Escape India</h2>
-    <p id="place">Gujarat Level</p>
+  <div class="titleBox">
+    <h2>Arrow Escape India</h2>
+    <p id="place">Gujarat • Level 1</p>
   </div>
 
   <div class="stats">
@@ -94,192 +137,236 @@ body{
     Tap arrows. Clear path હોય તો arrow escape થશે.
     <div class="adbox">Ad Space</div>
   </div>
+</div>
 
-  <div class="popup" id="popup">
-    <div class="card">
-      <h1 id="popTitle">Level Complete!</h1>
-      <p id="popText">Great job!</p>
-      <button class="btn" onclick="nextLevel()">Next Level</button>
-    </div>
+<div class="popup" id="popup">
+  <div class="card">
+    <h1 id="popTitle">Level Complete!</h1>
+    <p id="popText">Good job!</p>
+    <button onclick="nextLevel()">Next Level</button>
   </div>
 </div>
 
 <script>
-const board = document.getElementById("board");
-const levelText = document.getElementById("level");
-const coinsText = document.getElementById("coins");
-const livesText = document.getElementById("lives");
-const title = document.getElementById("title");
-const place = document.getElementById("place");
-const popup = document.getElementById("popup");
+const board=document.getElementById("board");
+const levelText=document.getElementById("level");
+const livesText=document.getElementById("lives");
+const coinsText=document.getElementById("coins");
+const place=document.getElementById("place");
+const popup=document.getElementById("popup");
 
-let level = 1;
-let coins = 0;
-let lives = 3;
-let arrows = [];
+let level=Number(localStorage.getItem("aei_level"))||1;
+let coins=Number(localStorage.getItem("aei_coins"))||0;
+let lives=3;
+let arrows=[];
 
-const states = [
-  "Gujarat 🦁", "Rajasthan 🏰", "Maharashtra 🌆", "Kerala 🌴", "Delhi 🏛️"
+const levels=[
+[
+{x:40,y:70,dir:"right",c:"green"},
+{x:230,y:70,dir:"left",c:"red"},
+{x:130,y:190,dir:"down",c:"blue"},
+{x:60,y:310,dir:"right",c:"purple"}
+],
+[
+{x:40,y:80,dir:"right",c:"green"},
+{x:210,y:80,dir:"left",c:"red"},
+{x:120,y:180,dir:"down",c:"blue"},
+{x:260,y:250,dir:"left",c:"purple"},
+{x:80,y:330,dir:"right",c:"green"}
+],
+[
+{x:45,y:60,dir:"right",c:"blue"},
+{x:200,y:60,dir:"left",c:"red"},
+{x:80,y:170,dir:"down",c:"green"},
+{x:220,y:170,dir:"down",c:"purple"},
+{x:45,y:330,dir:"right",c:"red"},
+{x:240,y:330,dir:"left",c:"blue"}
+],
+[
+{x:120,y:50,dir:"down",c:"green"},
+{x:50,y:130,dir:"right",c:"red"},
+{x:240,y:130,dir:"left",c:"purple"},
+{x:120,y:250,dir:"up",c:"blue"},
+{x:50,y:340,dir:"right",c:"green"}
+],
+[
+{x:40,y:60,dir:"right",c:"green"},
+{x:160,y:60,dir:"right",c:"blue"},
+{x:260,y:60,dir:"left",c:"red"},
+{x:70,y:190,dir:"down",c:"purple"},
+{x:210,y:250,dir:"up",c:"green"},
+{x:260,y:330,dir:"left",c:"blue"}
+],
+[
+{x:50,y:70,dir:"right",c:"red"},
+{x:230,y:70,dir:"left",c:"blue"},
+{x:130,y:150,dir:"down",c:"green"},
+{x:50,y:260,dir:"right",c:"purple"},
+{x:250,y:260,dir:"left",c:"green"},
+{x:130,y:330,dir:"up",c:"red"}
+],
+[
+{x:70,y:45,dir:"down",c:"green"},
+{x:180,y:45,dir:"down",c:"blue"},
+{x:40,y:150,dir:"right",c:"red"},
+{x:240,y:150,dir:"left",c:"purple"},
+{x:40,y:300,dir:"right",c:"blue"},
+{x:240,y:300,dir:"left",c:"green"}
+],
+[
+{x:40,y:70,dir:"right",c:"green"},
+{x:170,y:70,dir:"right",c:"red"},
+{x:260,y:70,dir:"left",c:"blue"},
+{x:100,y:180,dir:"down",c:"purple"},
+{x:210,y:180,dir:"down",c:"green"},
+{x:70,y:330,dir:"right",c:"red"},
+{x:250,y:330,dir:"left",c:"blue"}
+],
+[
+{x:120,y:40,dir:"down",c:"blue"},
+{x:40,y:110,dir:"right",c:"green"},
+{x:230,y:110,dir:"left",c:"red"},
+{x:120,y:220,dir:"up",c:"purple"},
+{x:40,y:320,dir:"right",c:"blue"},
+{x:230,y:320,dir:"left",c:"green"}
+],
+[
+{x:40,y:55,dir:"right",c:"red"},
+{x:230,y:55,dir:"left",c:"green"},
+{x:75,y:150,dir:"down",c:"purple"},
+{x:210,y:150,dir:"down",c:"blue"},
+{x:40,y:285,dir:"right",c:"green"},
+{x:230,y:285,dir:"left",c:"red"},
+{x:145,y:340,dir:"up",c:"blue"}
+]
 ];
 
-function makeLevels(){
-  let all = [];
-  for(let i=1;i<=20;i++){
-    let count = 5 + Math.floor(i/2);
-    let arr = [];
-    for(let j=0;j<count;j++){
-      let dirs = ["up","down","left","right"];
-      arr.push({
-        x: 40 + Math.floor(Math.random()*300),
-        y: 40 + Math.floor(Math.random()*320),
-        dir: dirs[Math.floor(Math.random()*4)]
-      });
-    }
-    all.push(arr);
-  }
-  return all;
+function stateName(){
+  if(level<=2)return "Gujarat 🦁";
+  if(level<=4)return "Rajasthan 🏰";
+  if(level<=6)return "Maharashtra 🌆";
+  if(level<=8)return "Kerala 🌴";
+  return "Delhi 🏛️";
 }
-
-const levels = [
-  [
-    {x:60,y:80,dir:"right"},
-    {x:180,y:80,dir:"down"},
-    {x:60,y:220,dir:"right"},
-    {x:240,y:220,dir:"up"},
-    {x:150,y:320,dir:"left"}
-  ],
-  [
-    {x:60,y:90,dir:"right"},
-    {x:180,y:90,dir:"down"},
-    {x:300,y:90,dir:"left"},
-    {x:120,y:220,dir:"up"},
-    {x:240,y:260,dir:"left"},
-    {x:60,y:330,dir:"right"}
-  ],
-  [
-    {x:50,y:70,dir:"right"},
-    {x:150,y:70,dir:"down"},
-    {x:250,y:70,dir:"left"},
-    {x:90,y:190,dir:"right"},
-    {x:210,y:190,dir:"down"},
-    {x:300,y:300,dir:"left"}
-  ]
-];
-
-function symbol(dir){
-  return dir==="up"?"↑":dir==="down"?"↓":dir==="left"?"←":"→";
-}
+function icon(d){return d==="right"?"→":d==="left"?"←":d==="up"?"↑":"↓"}
 
 function loadLevel(){
-  board.innerHTML = "";
-  arrows = JSON.parse(JSON.stringify(levels[level-1]));
-  levelText.innerText = level;
-  livesText.innerText = lives;
-  coinsText.innerText = coins;
-
-  let stateIndex = Math.floor((level-1)/4);
-  title.innerText = "Arrow Escape India";
-  place.innerText = states[stateIndex] + " • Level " + level;
+  board.innerHTML="";
+  lives=3;
+  arrows=JSON.parse(JSON.stringify(levels[level-1]||levels[0]));
+  levelText.innerText=level;
+  livesText.innerText=lives;
+  coinsText.innerText=coins;
+  place.innerText=stateName()+" • Level "+level;
 
   arrows.forEach((a,i)=>{
-    const el = document.createElement("div");
-    el.className = "arrow";
-    el.innerText = symbol(a.dir);
-    el.style.left = a.x+"px";
-    el.style.top = a.y+"px";
-    el.onclick = ()=>tapArrow(i,el);
+    let el=document.createElement("div");
+    el.className="arrow "+a.c;
+    if(a.dir==="up"||a.dir==="down")el.classList.add("vertical");
+    el.style.left=a.x+"px";
+    el.style.top=a.y+"px";
+    el.innerText=icon(a.dir);
+    el.onclick=()=>tap(i);
     board.appendChild(el);
-    a.el = el;
-    a.done = false;
+    a.el=el;
+    a.done=false;
   });
 }
 
-function tapArrow(i,el){
-  let a = arrows[i];
-  if(a.done) return;
-
-  if(isClear(a,i)){
-    a.done = true;
-    coins += 2;
-    coinsText.innerText = coins;
-
-    if(a.dir==="up") el.style.top = "-80px";
-    if(a.dir==="down") el.style.top = "500px";
-    if(a.dir==="left") el.style.left = "-80px";
-    if(a.dir==="right") el.style.left = "500px";
-
-    setTimeout(()=>el.classList.add("done"),200);
-
-    if(arrows.every(x=>x.done)){
-      setTimeout(showWin,450);
-    }
-  }else{
-    lives--;
-    livesText.innerText = lives;
-    el.classList.add("block");
-    setTimeout(()=>el.classList.remove("block"),300);
-
-    if(lives<=0){
-      document.getElementById("popTitle").innerText = "Game Over";
-      document.getElementById("popText").innerText = "Try again!";
-      popup.style.display = "flex";
-    }
-  }
+function rect(a){
+  let w=(a.dir==="up"||a.dir==="down")?42:82;
+  let h=(a.dir==="up"||a.dir==="down")?82:42;
+  return {l:a.x,r:a.x+w,t:a.y,b:a.y+h};
 }
 
 function isClear(a,index){
+  let ar=rect(a);
   for(let i=0;i<arrows.length;i++){
-    if(i===index || arrows[i].done) continue;
-    let b = arrows[i];
+    if(i===index||arrows[i].done)continue;
+    let b=arrows[i],br=rect(b);
 
-    if(a.dir==="up"){
-      if(Math.abs(a.x-b.x)<45 && b.y<a.y) return false;
-    }
-    if(a.dir==="down"){
-      if(Math.abs(a.x-b.x)<45 && b.y>a.y) return false;
+    if(a.dir==="right"){
+      if(br.l>ar.r && !(br.t>ar.b || br.b<ar.t))return false;
     }
     if(a.dir==="left"){
-      if(Math.abs(a.y-b.y)<45 && b.x<a.x) return false;
+      if(br.r<ar.l && !(br.t>ar.b || br.b<ar.t))return false;
     }
-    if(a.dir==="right"){
-      if(Math.abs(a.y-b.y)<45 && b.x>a.x) return false;
+    if(a.dir==="down"){
+      if(br.t>ar.b && !(br.l>ar.r || br.r<ar.l))return false;
+    }
+    if(a.dir==="up"){
+      if(br.b<ar.t && !(br.l>ar.r || br.r<ar.l))return false;
     }
   }
   return true;
 }
 
-function showWin(){
-  document.getElementById("popTitle").innerText = "Level Complete!";
-  document.getElementById("popText").innerText = "+10 coins unlocked";
-  coins += 10;
-  coinsText.innerText = coins;
-  popup.style.display = "flex";
+function tap(i){
+  let a=arrows[i];
+  if(a.done)return;
+
+  if(!isClear(a,i)){
+    lives--;
+    livesText.innerText=lives;
+    a.el.classList.add("block");
+    setTimeout(()=>a.el.classList.remove("block"),250);
+    if(lives<=0)gameOver();
+    return;
+  }
+
+  a.done=true;
+  coins+=2;
+  coinsText.innerText=coins;
+
+  if(a.dir==="right")a.el.style.left="520px";
+  if(a.dir==="left")a.el.style.left="-140px";
+  if(a.dir==="up")a.el.style.top="-140px";
+  if(a.dir==="down")a.el.style.top="520px";
+
+  setTimeout(()=>a.el.classList.add("done"),260);
+
+  if(arrows.every(x=>x.done)){
+    setTimeout(win,420);
+  }
+}
+
+function win(){
+  coins+=10;
+  localStorage.setItem("aei_coins",coins);
+  document.getElementById("popTitle").innerText="Level Complete!";
+  document.getElementById("popText").innerText="+10 coins earned";
+  popup.style.display="flex";
+}
+
+function gameOver(){
+  document.getElementById("popTitle").innerText="Game Over";
+  document.getElementById("popText").innerText="Try again!";
+  popup.style.display="flex";
 }
 
 function nextLevel(){
-  popup.style.display = "none";
+  popup.style.display="none";
   if(level<levels.length){
     level++;
-    lives = 3;
+    localStorage.setItem("aei_level",level);
     loadLevel();
   }else{
-    document.getElementById("popTitle").innerText = "Coming Soon!";
-    document.getElementById("popText").innerText = "More India levels soon.";
-    popup.style.display = "flex";
+    document.getElementById("popTitle").innerText="Coming Soon!";
+    document.getElementById("popText").innerText="More levels add karvana chhe.";
+    popup.style.display="flex";
   }
 }
 
 function restartLevel(){
-  lives = 3;
-  popup.style.display = "none";
+  popup.style.display="none";
   loadLevel();
 }
 
 function useHint(){
   for(let i=0;i<arrows.length;i++){
     if(!arrows[i].done && isClear(arrows[i],i)){
-      arrows[i].el.style.background = "linear-gradient(145deg,#ff9933,#138808)";
-      setTimeout(()=>arrows[i].el.style.background="linear-gradient(145deg,#222,#555)",900);
+      arrows[i].el.style.transform="scale(1.18)";
+      setTimeout(()=>arrows[i].el.style.transform="scale(1)",650);
       return;
     }
   }
@@ -287,6 +374,5 @@ function useHint(){
 
 loadLevel();
 </script>
-
 </body>
 </html>
